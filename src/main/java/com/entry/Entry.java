@@ -5,6 +5,7 @@ import com.sun.net.httpserver.spi.HttpServerProvider;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 
 import static com.entry.MiddleWare.MIDDLE_WARE;
@@ -25,7 +26,8 @@ public class Entry {
 
     public static void main(String[] args) throws IOException {
         var provider = HttpServerProvider.provider();
-        httpServer = provider.createHttpServer(new InetSocketAddress(9090),0);
+        var listeningPort = getPort();
+        httpServer = provider.createHttpServer(new InetSocketAddress(listeningPort),0);
         httpServer.setExecutor(Executors.newFixedThreadPool(10));
 
         // This and its middleware will catch everything unless the route is caught by another context
@@ -46,5 +48,17 @@ public class Entry {
         whoAmIContext.getFilters().addAll(MIDDLE_WARE);
 
         httpServer.start();
+    }
+
+    private static Integer getPort() {
+        try{
+            var port = System.getenv().get("PORT");
+            if(port == null){
+             throw new IllegalArgumentException("env var PORT needs to be defined");
+            }
+            return Integer.parseInt(System.getenv().get("PORT"));
+        }catch (NumberFormatException e){
+            throw new NumberFormatException("env var PORT needs to be a number");
+        }
     }
 }

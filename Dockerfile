@@ -5,7 +5,7 @@ RUN gu install native-image
 
 WORKDIR /app
 COPY ./target/graalvm_practice.jar ./app/graalvm_practice.jar
-RUN native-image -jar ./app/graalvm_practice.jar --no-fallback --initialize-at-build-time=com.entry.Entry -J--add-modules -JALL-SYSTEM
+RUN native-image -jar ./app/graalvm_practice.jar --no-fallback --initialize-at-build-time=com.entry.Entry --enable-http --add-modules jdk.httpserver
 
 FROM ghcr.io/graalvm/native-image:22.2.0 as runtime
 

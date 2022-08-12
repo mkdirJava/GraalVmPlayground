@@ -92,7 +92,7 @@ We trigger it using the maven plugin "docker-maven-plugin",
 6. We can then run the image via the command
 
 ```aidl
-   docker run -p9090:9090 graalvm_practice:1.0-SNAPSHOT 
+   docker run -ePORT=9090 -p9090:9090 graalvm_practice:1.0-SNAPSHOT 
    // We can then curl to it
    curl localhost:9090
    // stop it via killing the container, might take a bit seeing it sends a stop signal
